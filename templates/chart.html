@@ -33,7 +33,7 @@
 		 responsive: true,
 		 title: {
 		     display: true,
-		     text: 'Felhasználható egyenleg (utolsó frissítés: {{values[-1][0]}})'
+		     text: 'Felhasználható adat: {{values[-1][1]}} MB / {{values[-1][4]}} nap, egyenleg: {{values[-1][3]}} Ft (utolsó frissítés: {{values[-1][0]}})'
 		 },
 		 scales: {
 		     xAxes: [{
@@ -43,8 +43,8 @@
 			     display: false
 			 },
 			 time: {
-			     min: "2016-11-07",
-			     max: "2016-12-07"
+			     min: "{{renew[0]}}",
+			     max: "{{renew[1]}}"
 			 }
 		     }],
 		     yAxes: [{
