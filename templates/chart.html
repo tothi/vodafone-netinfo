@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8" />
+	<title>Vodafone Netinfo Chart</title>
+	<!-- import plugin script -->
+	<script src='static/moment.min.js'></script>
+	<script src='static/Chart.min.js'></script>
+	<script src='static/hammer.min.js'></script>
+	<script src='static/chartjs-plugin-zoom.min.js'></script>
+	<script src='static/chartjs-plugin-annotation.min.js'></script>'
+    </head>
+    <body>
+	<!-- bar chart canvas element -->
+	<canvas id="chart" width="600" height="400"></canvas>
+	<script>
+	 var config = {
+             type: 'line',
+             data: {
+		 datasets: [{
+		     borderColor: 'rgba(0,0,200,1)',
+		     borderWidth: 1.5,
+		     backgroundColor: 'rgba(0,0,20,0.1)',
+		     pointRadius: 1,
+		     fill: true,
+		     data: [{% for xy in values %} { x: '{{xy[0]}}', y: {{xy[1]}} }, {% endfor %}],
+		 }],
+             },
+             options: {
+		 legend: {
+		     display: false
+		 },
+		 responsive: true,
+		 title: {
+		     display: true,
+		     text: 'Felhasználható egyenleg (utolsó frissítés: {{values[-1][0]}})'
+		 },
+		 scales: {
+		     xAxes: [{
+			 type: "time",
+			 display: true,
+			 scaleLabel: {
+			     display: false
+			 },
+			 time: {
+			     min: "2016-11-07",
+			     max: "2016-12-07"
+			 }
+		     }],
+		     yAxes: [{
+			 display: true,
+			 scaleLabel: {
+			     display: true,
+			     labelString: 'adatmennyiség [MB]'
+			 },
+			 ticks: {
+			     min: 0
+			 }
+		     }]
+		 },
+		 pan: {
+		     enabled: true,
+		     mode: 'x'
+		 },
+		 zoom: {
+		     enabled: true,
+		     mode: 'x',
+		     limits: {
+			 max: 10,
+			 min: 0.5
+		     }
+		 },
+		 annotation: {
+		     annotations: [{% for d in renew %}{
+			 type: 'line',
+			 mode: 'vertical',
+			 scaleID: 'x-axis-0',
+			 value: '{{d}}',
+			 borderColor: 'red',
+			 borderWidth: 2
+		     }, {% endfor %}],
+		     drawTime: 'afterDraw'
+		 }
+	     }
+	 };		 
+
+	 window.onload = function() {
+	     var ctx = document.getElementById("chart").getContext("2d");
+	     ctx.canvas.width = window.innerWidth * 0.95;
+	     ctx.canvas.height = window.innerHeight * 0.85;
+
+	     window.myLine = new Chart(ctx, config);
+	 };
+	</script>
+    </body>
+</html>
