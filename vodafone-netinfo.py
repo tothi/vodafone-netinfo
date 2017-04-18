@@ -81,19 +81,25 @@ class ChartAppData(object):
 
 class NetinfoInterface(requests.Session):
     URL_BASE = "https://m.vodafone.hu"
-    URL_LOGIN = URL_BASE + "/belepes?p_p_id=OpenSSOLoginPortlet_WAR_OpenSSOLoginPortlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_OpenSSOLoginPortlet_WAR_OpenSSOLoginPortlet_login-action=login"
+    URL_LOGIN = 'https://sso.vodafone.hu/oam/server/authentication'
     URL_PROFILE = URL_BASE + "/online_ugyfelszolgalat/-/szolgaltatas/Profilom"
     URL_NETINFO = URL_BASE + "/netinfo"
-    URL_LOGOUT = URL_BASE + '/belepes?p_p_id=OpenSSOLoginPortlet_WAR_OpenSSOLoginPortlet&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&_OpenSSOLoginPortlet_WAR_OpenSSOLoginPortlet_login-action=logout'
-    
+    URL_LOGOUT = 'https://sso.vodafone.hu/oam/server/logout'
+
     def login(self, number, passwd):
         self.headers.update({'User-Agent': 'Mozilla/5.0'})
         self.post(self.URL_LOGIN,
-                  data = {'msisdn': number, 'password': passwd})
+                  data = {'operation': 'authentication',
+                          'successurl': 'https://www.vodafone.hu/sikeres-bejelentkezes?gotoURL=http%3A%2F%2Fwww.vodafone.hu%2Fweb%2Fnetinfo',
+                          'errorurl': 'https://www.vodafone.hu/belepes?p_p_id=LoginPortlet_WAR_VfhLoginPortlet&p_p_lifecycle=0&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_LoginPortlet_WAR_VfhLoginPortlet_render=loginError',
+                          'resourceurl': 'https://www.vodafone.hu/belepes',
+                          'type': 'legacy',
+                          'username': number,
+                          'password': passwd})
         
     def logout(self):
         self.get(self.URL_LOGOUT)
-
+        
     inet_remain, inet_total, days, balance = None, None, None, None
 
     def profil(self):
