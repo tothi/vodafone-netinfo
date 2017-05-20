@@ -196,8 +196,14 @@ if __name__ == "__main__":
             logger_io.seek(0)
 
         print("[*] kilépés...", end="", flush=True)
-        v.logout()
-        print("kész.")
+        try:
+            v.logout()
+            print("kész.")
+        except:
+            print("kommunikációs hiba. ;(")
+            del v
+            v = NetinfoInterace()
+            print("[+] új munkamenet")
 
         if args.delay:
             print("[*] várakozás %d másodpercig..." % int(args.delay[0]), end="", flush=True)
