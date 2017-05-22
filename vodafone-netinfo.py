@@ -172,11 +172,15 @@ if __name__ == "__main__":
         logger.addHandler(ch)
         print("[*] naplózás a '%s' fájlba" % args.netlogfile[0])
 
-    v = NetinfoInterface()
+    newInterface = True
 
     run = True
     while(run):
         print("[*] belépés a Vodafone Online Ügyintézés felületére...", end="", flush=True)
+        if newInterface:
+            v = NetinfoInterface()
+            print("[*] új munkamenet létrehozva")
+            newInterface = False
         v.login(number, passwd)
         print("kész.")
 
@@ -202,8 +206,8 @@ if __name__ == "__main__":
         except:
             print("kommunikációs hiba. ;(")
             del v
-            v = NetinfoInterace()
-            print("[+] új munkamenet")
+            newInterface = True
+            print("[+] új munkamenet...")
 
         if args.delay:
             print("[*] várakozás %d másodpercig..." % int(args.delay[0]), end="", flush=True)
