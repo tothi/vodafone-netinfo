@@ -179,7 +179,7 @@ if __name__ == "__main__":
         print("[*] belépés a Vodafone Online Ügyintézés felületére...", end="", flush=True)
         if newInterface:
             v = NetinfoInterface()
-            print("[*] új munkamenet létrehozva")
+            print("új munkamenet létrehozva...", end="", flush=True)
             newInterface = False
         v.login(number, passwd)
         print("kész.")
